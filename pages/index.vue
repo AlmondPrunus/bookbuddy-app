@@ -21,7 +21,7 @@
             @click="currentView = 'add'"
             class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2"
           >
-            <Icon name="lucide:plus" class="w-4 h-4" />
+            <Icon name="lucid:plus" class="w-4 h-4" />
             <span class="hidden sm:inline">Add Book</span>
           </button>
         </div>
@@ -73,7 +73,7 @@
 
         <!-- Books Grid -->
         <div v-else>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div class="grid grid-cols-4 gap-6">
             <div
               v-for="book in currentBooks"
               :key="book._id"
@@ -300,7 +300,7 @@
                     :disabled="loading"
                     class="flex-1 bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
                   >
-                    <Icon v-if="loading" name="lucide:loader-2" class="w-4 h-4 animate-spin" />
+                    <Icon v-if="loading" name="lucid:loader-2" class="w-4 h-4 animate-spin" />
                     <span>{{ loading ? 'Deleting...' : 'DELETE' }}</span>
                   </button>
                 </div>
@@ -318,211 +318,33 @@
 </template>
 
 <script setup>
-// Sample data
-const initialBooks = [
-  {
-    _id: "A001",
-    title: "Clean Code",
-    author: "Robert C. Martin",
-    published_year: 2008,
-    genre: "Programming",
-    created_at: "2025-06-16T12:00:00Z",
-    updated_at: "2025-06-16T12:00:00Z"
-  },
-  {
-    _id: "A002",  
-    title: "The Pragmatic Programmer",
-    author: "David Thomas",
-    published_year: 1999,
-    genre: "Programming",
-    created_at: "2025-06-15T10:30:00Z",
-    updated_at: "2025-06-15T10:30:00Z"
-  },
-  {
-    _id: "A003",
-    title: "Design Patterns",
-    author: "Gang of Four",
-    published_year: 1994,
-    genre: "Programming",
-    created_at: "2025-06-14T14:20:00Z",
-    updated_at: "2025-06-14T14:20:00Z"
-  },
-  {
-    _id: "A004",
-    title: "JavaScript: The Good Parts",
-    author: "Douglas Crockford",
-    published_year: 2008,
-    genre: "Programming",
-    created_at: "2025-06-13T09:15:00Z",
-    updated_at: "2025-06-13T09:15:00Z"
-  },
-  {
-    _id: "A005",
-    title: "You Don't Know JS",
-    author: "Kyle Simpson",
-    published_year: 2014,
-    genre: "Programming",
-    created_at: "2025-06-12T16:45:00Z",
-    updated_at: "2025-06-12T16:45:00Z"
-  },
-  {
-    _id: "A006",
-    title: "Eloquent JavaScript",
-    author: "Marijn Haverbeke",
-    published_year: 2011,
-    genre: "Programming",
-    created_at: "2025-06-11T11:30:00Z",
-    updated_at: "2025-06-11T11:30:00Z"
-  },
-  {
-    _id: "A007",
-    title: "The Great Gatsby",
-    author: "F. Scott Fitzgerald",
-    published_year: 1925,
-    genre: "Fiction",
-    created_at: "2025-06-10T08:20:00Z",
-    updated_at: "2025-06-10T08:20:00Z"
-  },
-  {
-    _id: "A008",
-    title: "To Kill a Mockingbird",
-    author: "Harper Lee",
-    published_year: 1960,
-    genre: "Fiction",
-    created_at: "2025-06-09T15:30:00Z",
-    updated_at: "2025-06-09T15:30:00Z"
-  },
-  {
-    _id: "A009",
-    title: "1984",
-    author: "George Orwell",
-    published_year: 1949,
-    genre: "Fiction",
-    created_at: "2025-06-08T11:45:00Z",
-    updated_at: "2025-06-08T11:45:00Z"
-  },
-  {
-    _id: "A010",
-    title: "Pride and Prejudice",
-    author: "Jane Austen",
-    published_year: 1813,
-    genre: "Fiction",
-    created_at: "2025-06-07T13:20:00Z",
-    updated_at: "2025-06-07T13:20:00Z"
-  },
-  {
-    _id: "A011",
-    title: "The Catcher in the Rye",
-    author: "J.D. Salinger",
-    published_year: 1951,
-    genre: "Fiction",
-    created_at: "2025-06-06T09:15:00Z",
-    updated_at: "2025-06-06T09:15:00Z"
-  },
-  {
-    _id: "A012",
-    title: "Sapiens",
-    author: "Yuval Noah Harari",
-    published_year: 2011,
-    genre: "Non-Fiction",
-    created_at: "2025-06-05T16:30:00Z",
-    updated_at: "2025-06-05T16:30:00Z"
-  },
-  {
-    _id: "A013",
-    title: "The Lean Startup",
-    author: "Eric Ries",
-    published_year: 2011,
-    genre: "Non-Fiction",
-    created_at: "2025-06-04T10:45:00Z",
-    updated_at: "2025-06-04T10:45:00Z"
-  },
-  {
-    _id: "A014",
-    title: "Atomic Habits",
-    author: "James Clear",
-    published_year: 2018,
-    genre: "Non-Fiction",
-    created_at: "2025-06-03T14:20:00Z",
-    updated_at: "2025-06-03T14:20:00Z"
-  },
-  {
-    _id: "A015",
-    title: "The Power of Habit",
-    author: "Charles Duhigg",
-    published_year: 2012,
-    genre: "Non-Fiction",
-    created_at: "2025-06-02T12:15:00Z",
-    updated_at: "2025-06-02T12:15:00Z"
-  },
-  {
-    _id: "A016",
-    title: "Dune",
-    author: "Frank Herbert",
-    published_year: 1965,
-    genre: "Fantasy",
-    created_at: "2025-06-01T17:30:00Z",
-    updated_at: "2025-06-01T17:30:00Z"
-  },
-  {
-    _id: "A017",
-    title: "The Lord of the Rings",
-    author: "J.R.R. Tolkien",
-    published_year: 1954,
-    genre: "Fantasy",
-    created_at: "2025-05-31T11:20:00Z",
-    updated_at: "2025-05-31T11:20:00Z"
-  },
-  {
-    _id: "A018",
-    title: "Harry Potter and the Philosopher's Stone",
-    author: "J.K. Rowling",
-    published_year: 1997,
-    genre: "Fantasy",
-    created_at: "2025-05-30T08:45:00Z",
-    updated_at: "2025-05-30T08:45:00Z"
-  },
-  {
-    _id: "A019",
-    title: "The Girl with the Dragon Tattoo",
-    author: "Stieg Larsson",
-    published_year: 2005,
-    genre: "Mystery",
-    created_at: "2025-05-29T15:10:00Z",
-    updated_at: "2025-05-29T15:10:00Z"
-  },
-  {
-    _id: "A020",
-    title: "Gone Girl",
-    author: "Gillian Flynn",
-    published_year: 2012,
-    genre: "Mystery",
-    created_at: "2025-05-28T13:25:00Z",
-    updated_at: "2025-05-28T13:25:00Z"
-  },
-  {
-    _id: "A021",
-    title: "The Da Vinci Code",
-    author: "Dan Brown",
-    published_year: 2003,
-    genre: "Mystery",
-    created_at: "2025-05-27T09:40:00Z",
-    updated_at: "2025-05-27T09:40:00Z"
-  }
+import { ref, computed, watch } from 'vue'
+import { useBooks } from '~/composables/useBooks'
+
+const genres = [
+  "Agile",
+  "Computer Science",
+  "DevOps",
+  "Programming",
+  "Software Engineering",
+  "Web Development"
 ]
 
-const genres = ["Programming", "Fiction", "Non-Fiction", "Science", "History", "Biography", "Fantasy", "Mystery"]
+const {
+  books,
+  loading,
+  error,
+  addBook: addBookComposable,
+  updateBook: updateBookComposable,
+  deleteBook: deleteBookComposable
+} = useBooks()
 
-// Reactive state
-const books = ref([...initialBooks])
 const currentView = ref('list')
 const selectedBook = ref(null)
 const searchTerm = ref('')
 const selectedGenre = ref('')
 const selectedYear = ref('')
 const currentPage = ref(1)
-const loading = ref(false)
-const error = ref('')
 const formData = ref({
   title: '',
   author: '',
@@ -532,11 +354,10 @@ const formData = ref({
 
 const booksPerPage = 8
 
-// Computed properties
 const filteredBooks = computed(() => {
   return books.value.filter(book => {
     const matchesSearch = book.title.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
-                         book.author.toLowerCase().includes(searchTerm.value.toLowerCase())
+      book.author.toLowerCase().includes(searchTerm.value.toLowerCase())
     const matchesGenre = !selectedGenre.value || book.genre === selectedGenre.value
     const matchesYear = !selectedYear.value || book.published_year.toString() === selectedYear.value
     return matchesSearch && matchesGenre && matchesYear
@@ -551,93 +372,63 @@ const availableYears = computed(() => {
 const formYearOptions = computed(() => {
   const currentYear = new Date().getFullYear()
   return Array.from(
-    { length: currentYear - 1899 + 1 }, 
-    (_, i) => currentYear - i + 1
-  ).slice(1)
+    { length: currentYear - 1900 + 1 },
+    (_, i) => currentYear - i
+  )
 })
 
 const totalPages = computed(() => Math.ceil(filteredBooks.value.length / booksPerPage))
-
 const startIndex = computed(() => (currentPage.value - 1) * booksPerPage)
-
 const currentBooks = computed(() => {
   return filteredBooks.value.slice(startIndex.value, startIndex.value + booksPerPage)
 })
 
-// Methods
-const generateId = () => {
-  const prefix = 'A'
-  const number = String(books.value.length + 1).padStart(3, '0')
-  return prefix + number
-}
-
-const simulateLoading = (callback, duration = 800) => {
-  loading.value = true
-  error.value = ''
-  setTimeout(() => {
-    try {
-      callback()
-      loading.value = false
-    } catch (err) {
-      error.value = 'Something went wrong. Please try again.'
-      loading.value = false
-    }
-  }, duration)
-}
-
-const addBook = () => {
+const addBook = async () => {
   if (!formData.value.title || !formData.value.author || !formData.value.published_year || !formData.value.genre) {
     error.value = 'Please fill in all fields'
     return
   }
-
-  simulateLoading(() => {
-    const newBook = {
-      _id: generateId(),
+  try {
+    await addBookComposable({
       title: formData.value.title,
       author: formData.value.author,
-      published_year: parseInt(formData.value.published_year),
-      genre: formData.value.genre,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    }
-
-    books.value.push(newBook)
+      published_year: formData.value.published_year,
+      genre: formData.value.genre
+    })
     formData.value = { title: '', author: '', published_year: '', genre: '' }
     currentView.value = 'list'
-  })
+  } catch (e) {
+    // error.value is already set by composable
+  }
 }
 
-const updateBook = () => {
+const updateBook = async () => {
   if (!formData.value.title || !formData.value.author || !formData.value.published_year || !formData.value.genre) {
     error.value = 'Please fill in all fields'
     return
   }
-
-  simulateLoading(() => {
-    const index = books.value.findIndex(book => book._id === selectedBook.value._id)
-    if (index !== -1) {
-      books.value[index] = {
-        ...books.value[index],
-        title: formData.value.title,
-        author: formData.value.author,
-        published_year: parseInt(formData.value.published_year),
-        genre: formData.value.genre,
-        updated_at: new Date().toISOString()
-      }
-    }
-
+  try {
+    await updateBookComposable(selectedBook.value._id, {
+      title: formData.value.title,
+      author: formData.value.author,
+      published_year: formData.value.published_year,
+      genre: formData.value.genre
+    })
     selectedBook.value = null
     formData.value = { title: '', author: '', published_year: '', genre: '' }
     currentView.value = 'list'
-  })
+  } catch (e) {
+    // error.value is already set by composable
+  }
 }
 
-const deleteBook = (bookId) => {
-  simulateLoading(() => {
-    books.value = books.value.filter(book => book._id !== bookId)
+const deleteBook = async (bookId) => {
+  try {
+    await deleteBookComposable(bookId)
     currentView.value = 'list'
-  }, 500)
+  } catch (e) {
+    // error.value is already set by composable
+  }
 }
 
 const viewBook = (book) => {
@@ -650,7 +441,6 @@ const editBook = (book) => {
   currentView.value = 'edit'
 }
 
-// Watchers
 watch(currentView, () => {
   error.value = ''
   formData.value = { title: '', author: '', published_year: '', genre: '' }
@@ -667,7 +457,6 @@ watch([selectedBook, currentView], () => {
   }
 })
 
-// Meta tags
 useHead({
   title: 'BookBuddy - Book Management System',
   meta: [

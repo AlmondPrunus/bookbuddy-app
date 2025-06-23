@@ -8,7 +8,11 @@ module.exports = {
     "./app.vue"
   ],
   theme: {
-    extend: {},
+    extend: {
+      gridTemplateColumns: {
+        'auto-fill-150': 'repeat(auto-fill, minmax(150px, 1fr))',
+      },
+    },
   },
   plugins: [],
 }

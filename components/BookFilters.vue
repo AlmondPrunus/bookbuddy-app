@@ -2,7 +2,7 @@
   <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-6">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div class="relative">
-        <Icon name="lucide:search" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+        <Icon icon="lucide:search" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
         <input
           :value="search"
           @input="$emit('update:search', $event.target.value)"
@@ -38,27 +38,22 @@
 </template>
 
 <script setup>
+import { Icon } from '@iconify/vue'
+
+const genres = [
+  "Agile",
+  "Computer Science",
+  "DevOps",
+  "Programming",
+  "Software Engineering",
+  "Web Development"
+]
+
 defineProps({
-  search: {
-    type: String,
-    default: ''
-  },
-  genre: {
-    type: String,
-    default: ''
-  },
-  year: {
-    type: String,
-    default: ''
-  },
-  availableYears: {
-    type: Array,
-    required: true
-  },
-  genres: {
-    type: Array,
-    required: true
-  }
+  search: String,
+  genre: String,
+  year: String,
+  availableYears: Array
 })
 
 defineEmits(['update:search', 'update:genre', 'update:year'])

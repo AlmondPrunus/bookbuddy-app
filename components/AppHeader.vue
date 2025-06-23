@@ -8,19 +8,19 @@
             @click="$emit('navigate', 'list')"
             class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
           >
-            <Icon name="lucide:arrow-left" class="w-5 h-5" />
+            <Icon icon="lucide:arrow-left" class="w-5 h-5" />
           </button>
-          <Icon name="lucide:book-open" class="w-8 h-8 text-blue-600" />
+          <Icon icon="lucide:book-open" class="w-8 h-8 text-blue-600" />
           <h1 class="text-2xl font-bold text-gray-900">BookBuddy</h1>
         </div>
         
         <button
           v-if="currentView === 'list'"
-          @click="$emit('add-book')"
+          @click="$emit('navigate', 'add')"
           class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2"
         >
-          <Icon name="lucide:plus" class="w-4 h-4" />
-          <span class="hidden sm:inline">Add Book</span>
+          <Icon icon="lucide:plus" class="w-4 h-4" />
+          <span>Add New Book</span>
         </button>
       </div>
     </div>
@@ -28,6 +28,8 @@
 </template>
 
 <script setup>
+import { Icon } from '@iconify/vue'
+
 defineProps({
   currentView: {
     type: String,
@@ -35,5 +37,5 @@ defineProps({
   }
 })
 
-defineEmits(['navigate', 'add-book'])
+defineEmits(['navigate'])
 </script>

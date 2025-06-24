@@ -908,4 +908,6 @@ export const initialBooksData = [
     "created_at": "2025-06-16T12:00:00Z",
     "updated_at": "2025-06-16T12:00:00Z"
   },
-]
+];
+
+export const availablePageSizes = [6, 12, 24, 48];

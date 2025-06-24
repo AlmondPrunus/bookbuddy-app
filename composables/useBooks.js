@@ -1,5 +1,4 @@
 export const useBooks = () => {
-  // Initial books data
   const initialBooks = [
   {
     "_id": "A001",
@@ -974,3 +973,4 @@ export const useBooks = () => {
     deleteBook
   }
 }
+

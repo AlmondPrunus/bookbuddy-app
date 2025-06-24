@@ -5,7 +5,7 @@
       @navigate="handleNavigation"
     />
 
-    <main class="mx-auto px-4 sm:px-6 lg:px-8">
+    <main class="max-w-8xl mx-auto px-4 sm:px-10 py-8 ">
       <!-- List View -->
       <BookList 
         v-if="currentView === 'list'"

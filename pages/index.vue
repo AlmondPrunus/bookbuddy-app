@@ -1,116 +1,64 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <AppHeader 
-      :current-view="currentView" 
-      @navigate="handleNavigation"
-    />
+    <AppHeader :current-view="'list'" @navigate="handleNavigation" />
 
-    <main class="max-w-8xl mx-auto px-4 sm:px-10 py-8 ">
-      <!-- List View -->
-      <BookList 
-        v-if="currentView === 'list'"
+    <main class="max-w-8xl mx-auto px-4 sm:px-10 py-8">
+      <BookList
         :books="books"
         :loading="loading"
         @view-book="viewBook"
         @edit-book="editBook"
         @delete-book="deleteBook"
       />
-
-      <!-- Add/Edit Form -->
-      <BookForm 
-        v-if="currentView === 'add' || currentView === 'edit'"
-        :mode="currentView"
-        :book="selectedBook"
-        :loading="loading"
-        :error="error"
-        @save="handleSave"
-        @cancel="currentView = 'list'"
-      />
-
-      <!-- View Book -->
-      <BookDetail 
-        v-if="currentView === 'view'"
-        :book="selectedBook"
-        :loading="loading"
-        @edit="editBook"
-        @delete="deleteBook"
-      />
     </main>
-    
+
     <AppFooter />
   </div>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
-import { useBooks } from '~/composables/useBooks'
+import { useBooks } from "~/composables/useBooks";
+import { useRouter } from "vue-router";
+import api from "~/services/api";
 
-const {
-  books,
-  loading,
-  error,
-  addBook: addBookComposable,
-  updateBook: updateBookComposable,
-  deleteBook: deleteBookComposable
-} = useBooks()
+const { books, loading, error, deleteBook: deleteBookComposable } = useBooks();
 
-const currentView = ref('list')
-const selectedBook = ref(null)
-const formData = ref({
-  title: '',
-  author: '',
-  published_year: '',
-  genre: ''
-})
+const router = useRouter();
 
-const handleNavigation = (view) => {
-  currentView.value = view
-}
+const handleNavigation = () => {
+  router.back();
+};
 
 const viewBook = (book) => {
-  selectedBook.value = book
-  currentView.value = 'view'
-}
+  router.push("/book/" + book._id);
+};
 
 const editBook = (book) => {
-  selectedBook.value = book
-  currentView.value = 'edit'
-}
+  router.push("/edit/" + book._id);
+};
 
 const deleteBook = async (bookId) => {
   try {
-    await deleteBookComposable(bookId)
-    currentView.value = 'list'
-  } catch (e) {
-    // error.value is already set by composable
-  }
-}
+    deleteBookComposable();
+    await api.delete(`/delete/book/${bookId}`);
+  } catch (e) {}
+};
 
-const handleSave = async (bookData, mode) => {
-  try {
-    if (mode === 'add') {
-      await addBookComposable(bookData)
-    } else {
-      await updateBookComposable(selectedBook.value._id, bookData)
-    }
-    selectedBook.value = null
-    currentView.value = 'list'
-  } catch (e) {
-    // error.value is already set by composable
-  }
-}
+const fetchBooks = async () => {
+  await api.get("/get/books");
+};
 
-watch(currentView, () => {
-  error.value = ''
-  if (currentView.value !== 'edit') {
-    selectedBook.value = null
-  }
-})
+onMounted(() => {
+  fetchBooks();
+});
 
 useHead({
-  title: 'BookBuddy - Book Management System',
+  title: "BookBuddy - Book Management System",
   meta: [
-    { name: 'description', content: 'A comprehensive book management system built with Nuxt.js' }
-  ]
-})
+    {
+      name: "description",
+      content: "A comprehensive book management system built with Nuxt.js",
+    },
+  ],
+});
 </script>

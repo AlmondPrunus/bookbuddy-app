@@ -3,11 +3,12 @@
     <AppHeader :current-view="currentView" @navigate="handleNavigation" />
 
     <main class="mmt-6 mb-2 text-sm text-gray-700">
-      <BookDetail
-        :book="books.find((book) => book._id === route.params.id)"
+      <BookForm
+        :mode="'add'"
         :loading="loading"
-        @edit="editBook"
-        @delete="deleteBook"
+        :error="error"
+        @save="handleSave"
+        @cancel="router.push('/')"
       />
     </main>
 
@@ -20,27 +21,26 @@ import { useBooks } from "~/composables/useBooks";
 import { useRouter, useRoute } from "vue-router";
 import api from "~/services/api";
 
-const { books, loading, error, deleteBook: deleteBookComposable } = useBooks();
+const { books, loading, error, addBook: addBookComposable } = useBooks();
 
 const router = useRouter();
 const route = useRoute();
 
 const handleNavigation = () => {
-  router.push("/");
+  router.back();
 };
 
-const editBook = () => {
-  router.push("/edit/" + route.params.id);
-};
-
-const deleteBook = async () => {
+const handleSave = async () => {
   try {
-    deleteBookComposable();
-    await api.delete(`/delete/books/${route.params.id}`);
+    addBookComposable();
+    await api.post("/add/books", {
+      title: "New Book",
+      author: "Unknown",
+      published_year: 2023,
+      genre: "Fiction",
+    });
     router.push("/");
-  } catch (e) {
-    router.push("/");
-  }
+  } catch (e) {}
 };
 
 useHead({

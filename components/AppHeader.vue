@@ -16,7 +16,7 @@
         
         <button
           v-if="currentView === 'list'"
-          @click="$emit('navigate', 'add')"
+          @click="router.push('/add')"
           class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2"
         >
           <Icon icon="lucide:plus" class="w-4 h-4" />
@@ -29,7 +29,9 @@
 
 <script setup>
 import { Icon } from '@iconify/vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 defineProps({
   currentView: {
     type: String,
